@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Environments / tooling caches
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Build output
+build/
+dist/
+*.whl
+*.spec
+
+# App / runtime artefacts
+best_genome.json
+.avs_settings.json
+
+# Generated docs
+/docs/*.pdf
+/scripts/assets/*.orig
+
+# Local-only session logs (personal traceability, not part of the repo)
+/prompts/prompts_gerais_v1.md
+/docs/traceback_v1.md

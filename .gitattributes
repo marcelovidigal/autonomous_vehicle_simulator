@@ -1,0 +1,14 @@
+# Normalise line endings: LF in the repo for everything text.
+* text=auto eol=lf
+
+# Shell scripts must stay LF even if checked out on Windows.
+*.sh text eol=lf
+
+# Binary assets — never touch.
+*.png binary
+*.gif binary
+*.pdf binary
+*.apk binary
+*.tar.gz binary
+*.zip binary
+*.json text eol=lf

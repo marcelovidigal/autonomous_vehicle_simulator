@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: uv pip install --system -e ".[dev]"
+      - name: Ruff
+        run: ruff check .
+      - name: Tests (fast + slow)
+        env:
+          SDL_VIDEODRIVER: dummy
+          SDL_AUDIODRIVER: dummy
+        run: pytest -q
+
+  smoke-app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: uv pip install --system -e ".[dev]"
+      - name: Headless screen smoke
+        env:
+          SDL_VIDEODRIVER: dummy
+          SDL_AUDIODRIVER: dummy
+          SMOKE_CYCLE: "ga,dqn,about,settings,tutorial_ga,tutorial_dqn,ga"
+          SMOKE_FRAMES: "320"
+        run: python main.py
+
+  package-smoke:
+    # Catch PyInstaller / data-file breakage on PRs, without waiting for a tag.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install -e ".[build,docs]"
+      - name: Build executable
+        run: python scripts/build_exe.py
+      - name: Package
+        run: python scripts/package_release.py
+      - name: Run the frozen binary headless
+        env:
+          SDL_VIDEODRIVER: dummy
+          SDL_AUDIODRIVER: dummy
+          SMOKE_CYCLE: "ga,dqn,about,settings,tutorial_ga,tutorial_dqn,ga"
+          SMOKE_FRAMES: "240"
+        run: |
+          bin="$(find dist -maxdepth 1 -type f -name 'AutonomousVehicleSimulator*' ! -name '*.zip' | head -n1)"
+          test -n "$bin" || { echo "no binary produced"; exit 1; }
+          chmod +x "$bin"
+          timeout 120 "$bin"

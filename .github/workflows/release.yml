@@ -1,0 +1,119 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:            # build-only dry run; never creates a release
+
+permissions:
+  contents: read
+
+jobs:
+  version-check:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: v
+        shell: bash
+        run: |
+          PKG="$(python -c 'import runpy; print(runpy.run_path("src/__init__.py")["__version__"])')"
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            V="${GITHUB_REF_NAME#v}"
+            if [ "$V" != "$PKG" ]; then
+              echo "::error::tag v$V does not match src/__init__.py __version__ ($PKG). Bump the version and CHANGELOG before tagging."
+              exit 1
+            fi
+          else
+            V="$PKG"
+          fi
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+          echo "Building version $V"
+
+  build:
+    needs: version-check
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest,  name: linux }
+          - { os: windows-latest, name: windows }
+          - { os: macos-latest,   name: macos }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install -e ".[build,docs]"
+      - name: Build executable
+        run: python scripts/build_exe.py
+      - name: Package
+        run: python scripts/package_release.py --version "${{ needs.version-check.outputs.version }}" --os-name ${{ matrix.name }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AutonomousVehicleSimulator-${{ matrix.name }}
+          path: dist/AutonomousVehicleSimulator-*-${{ matrix.name }}-*.zip
+          if-no-files-found: error
+
+  release:
+    if: github.ref_type == 'tag'
+    needs: [version-check, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write        # create the GitHub Release
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Assemble release notes
+        shell: bash
+        run: |
+          V="${{ needs.version-check.outputs.version }}"
+          # lines between "## [V]" and the next "## [" heading in CHANGELOG.md
+          awk -v head="## [$V]" '
+            index($0, head) == 1 { grab=1; next }
+            grab && index($0, "## [") == 1 { exit }
+            grab && index($0, "[") == 1 { exit }   # link-reference block at EOF
+            grab { print }
+          ' CHANGELOG.md > section.md
+          # trim leading/trailing blank lines
+          sed -i -e '/./,$!d' section.md
+          [ -s section.md ] || echo "_No CHANGELOG entry for $V._" > section.md
+          {
+            echo "**Autonomous Vehicle Simulator** — a neural network learns to drive a car around a"
+            echo "winding track using only raycast distance sensors. Two solutions over the same"
+            echo "sensor/car model — **Neural Net + GA** (neuroevolution) and **DQN** — running on the"
+            echo "desktop and in the browser from one Python codebase."
+            echo
+            echo "## What's new in $V"
+            cat section.md
+            echo
+            echo "## Downloads"
+            echo "Standalone executable — no Python needed. Unzip and run."
+            echo
+            echo "| File | Platform |"
+            echo "|---|---|"
+            for z in $(find artifacts -name '*.zip' | sort); do
+              b=$(basename "$z")
+              case "$b" in
+                *windows*) plat="Windows" ;;
+                *macos*)   plat="macOS" ;;
+                *linux*)   plat="Linux" ;;
+                *)         plat="?" ;;
+              esac
+              echo "| \`$b\` | $plat |"
+            done
+            echo "| **Source code** (zip / tar.gz, below) | the full repository at tag \`v$V\` |"
+          } > RELEASE_NOTES.md
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Autonomous Vehicle Simulator ${{ needs.version-check.outputs.version }}
+          body_path: RELEASE_NOTES.md
+          generate_release_notes: true      # appends the commit/PR list since the last tag
+          fail_on_unmatched_files: true
+          files: artifacts/**/*.zip
