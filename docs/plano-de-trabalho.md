@@ -164,7 +164,7 @@ Núcleo alvo: **< ~1500 linhas** — atual **~1050** (GA 831 + DQN ~220).
 - **GA:** tamanho da população, nº de gerações, taxa e força de mutação, elitismo, tamanho do torneio, crossover on/off, *seed*.
 - **Fitness:** pesos de progresso × velocidade × suavidade; penalidade de colisão.
 - **Simulação:** limite de passos por genoma (timeout), pista selecionada.
-- **Botões:** Iniciar/Pausar · Reset · **Re-treinar do zero** · Avançar 1 geração · Salvar/Carregar melhor genoma · Acelerar (sim rápido, anima só o melhor).
+- **Botões:** Iniciar/Pausar · **Aplicar** (aplica os sliders + reinicia o treino; tecla `a`) · Reset · Avançar 1 geração · Salvar/Carregar melhor genoma · Acelerar (sim rápido, anima só o melhor).
 
 ## 6. Estratégia de front-end (web-first)
 
@@ -230,7 +230,7 @@ Vercel/Netlify).
 | **3 — Evolução** | GA (torneio, crossover, mutação, elitismo), fitness, `trainer` incremental (step-a-step), treino *headless*; salvar melhor genoma; log de métricas | Um genoma evoluído completa 1 volta sem bater; curva de fitness sobe |
 | **4 — App Pygame (desktop)** | Loop `async`, `scene` (pista/carro/sensores), HUD; anima o melhor genoma | Roda a ≥30 fps; melhor genoma visível dirigindo |
 | **5 — Grafo da rede** | `netview` sincronizado com o carro em foco; `plot` de fitness | Ativações mudam visivelmente nas curvas |
-| **6 — Painel de controle** | `panel` de hiperparâmetros + botões; treino cooperativo no loop; re-treinar/reset/salvar/carregar (JSON) | Alterar hiperparâmetro + "Re-treinar" muda o comportamento sem travar a UI |
+| **6 — Painel de controle** | `panel` de hiperparâmetros + botões; treino cooperativo no loop; aplicar/reset/salvar/carregar (JSON) | Alterar slider + "Aplicar" muda o comportamento sem travar a UI |
 | **7 — Build web (`pygbag`) + publicação** | `scripts/build_web.sh`; GitHub Action publicando no Pages; espelho num HF Space Static | URL pública abre e treina no browser a ≥20 fps |
 | **8 — Polimento didático** | 2–3 pistas + gerador procedural opcional; *presets*; *tooltips*; README + `docs/`; roteiro guiado; GIF; (opcional) exe PyInstaller | Terceiro roda pelo README, local e pela URL |
 | **9 — Trilha B (opcional)** | `server/` FastAPI + `frontend/` PixiJS/D3 reusando o núcleo | Mesma demo, UX de "produto web" |

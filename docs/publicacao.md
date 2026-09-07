@@ -18,7 +18,7 @@
   o pygbag baixa runtime + NumPy do CDN publico. Publicar = `bash scripts/build_web.sh` ->
   `build/web/`.
   Conferir no navegador: a pista aparece, o carro anda, o grafo de neurônios pulsa,
-  os sliders + "Re-treinar" funcionam, FPS ≥ ~20. (Não consigo validar isto por você —
+  os sliders + "Aplicar" funcionam, FPS ≥ ~20. (Não consigo validar isto por você —
   é o único ponto ainda não verificado.)
 
 ## 1. Repositório Git

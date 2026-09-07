@@ -222,7 +222,9 @@ See §5.3.
 
 ### 6.9 `app/gascreen.py` — this screen
 Slider panel (hidden layer, sensors, population, mutation, elitism, fitness weights) +
-buttons (Play/Pause, +1 Gen, Turbo, Retrain, Reset, Track). Each frame: `trainer.step(...)`;
+buttons (Play/Pause, +1 Gen, Turbo, Apply, Reset, Track). **Apply** (key `a`) rebuilds the
+config from the sliders and restarts training; it lights up while a slider differs from the
+running config. Each frame: `trainer.step(...)`;
 if a new best appeared, it recomputes the `trace` and the `MLP`; it draws the scene (track +
 car + rays), the `netview` (nodes = activation, edges = signal) and the curve. The top bar
 switches technique; **Tutorial** opens this text; **Back** returns here.
@@ -231,7 +233,7 @@ switches technique; **Tutorial** opens this text; **Back** returns here.
 
 ## 7. Suggested exercises
 
-1. Set `Hidden layer = 0` and retrain on `circuito_1`: does it still drive? What about `circuito_3`?
+1. Set `Hidden layer = 0`, hit **Apply** on `circuito_1`: does it still drive? What about `circuito_3`?
 2. `Mutation strength` ~0.6: the fitness curve becomes more erratic — why?
 3. Zero out `Crash penalty`: what does the car start doing?
 4. `Sensors = 9`: does it improve on tight corners?

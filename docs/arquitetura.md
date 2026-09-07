@@ -444,7 +444,7 @@ bash scripts/build_web.sh
 
 // cliente -> servidor
 { "type": "set_params", "config": { /* Config.to_dict() parcial */ } }
-{ "type": "command", "name": "retrain" | "pause" | "resume" | "step_gen" | "reset" | "fast" }
+{ "type": "command", "name": "apply" | "pause" | "resume" | "step_gen" | "reset" | "fast" }
 { "type": "load_genome", "blob": { /* save() */ } }
 ```
 

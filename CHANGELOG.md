@@ -22,6 +22,11 @@ the auto-generated commit/PR list.
   `GITHUB_TOKEN` cannot create the Pages site; enable it once in repo Settings.
 
 ### Added
+- GA and DQN screens: an **Apply** button (key `a`) that rebuilds the config from the
+  sliders and restarts training, so a change like the number of hidden units takes effect
+  at once. It highlights while there are unapplied slider changes. On the GA screen it
+  replaces the old **Retrain** button (same behaviour); the DQN screen previously had no
+  way to apply slider changes without resetting them to the defaults.
 - Settings: **Simulation speed** (frame-rate cap: 30 / 60 / 120 / Uncapped), persisted
   like the language choice. Useful for lectures and screen capture.
 - About screen: **Copy link** button, shown once `src/app/links.py:PUBLISHED_URL` is set.

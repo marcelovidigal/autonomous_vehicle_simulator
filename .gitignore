@@ -22,6 +22,11 @@ best_genome.json
 /docs/*.pdf
 /scripts/assets/*.orig
 
+# Large captured media - too big for the repo (attach to a Release or use Git LFS)
+/docs/media/*.mp4
+/docs/media/*.mov
+/docs/media/*.webm
+
 # Local-only session logs (personal traceability, not part of the repo)
 /prompts/prompts_gerais_v1.md
 /docs/traceback_v1.md

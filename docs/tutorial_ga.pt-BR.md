@@ -214,7 +214,9 @@ Ver §5.3.
 
 ### 6.9 `app/gascreen.py` — esta tela
 Painel de sliders (camada oculta, sensores, população, mutação, elitismo, pesos de fitness)
-+ botões (Play/Pause, +1 Geração, Turbo, Re-treinar, Reset, Pista). A cada frame:
++ botões (Play/Pause, +1 Geração, Turbo, Aplicar, Reset, Pista). **Aplicar** (tecla `a`)
+reconstrói a config a partir dos sliders e reinicia o treino; acende quando algum slider
+difere da config em execução. A cada frame:
 `trainer.step(...)`; se surgiu um novo melhor, recomputa o `trace` e a `MLP`; desenha a
 cena (pista + carro + raios), o `netview` (nós = ativação, arestas = sinal) e a curva.
 A barra superior troca de técnica; **Tutorial** abre este texto; **Voltar** retorna aqui.

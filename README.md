@@ -44,8 +44,12 @@ uv pip install -e ".[dev]"
 uv run python main.py
 ```
 
-Common keys: `esc` (in text screens) = Back · `space` play/pause · `t` turbo · `h` tutorial.
-GA only: `g` = +1 generation.
+Common keys: `esc` (in text screens) = Back · `space` play/pause · `t` turbo · `a` apply
+slider changes + restart · `h` tutorial. GA only: `g` = +1 generation.
+
+Change a slider (hidden units, sensors, population, learning rate…) then hit **Apply** (it
+lights up while there are unapplied changes) to rebuild the network and restart training
+with the new settings.
 
 ## Native executable (no Python needed to run)
 

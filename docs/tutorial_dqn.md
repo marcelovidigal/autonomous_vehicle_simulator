@@ -125,7 +125,9 @@ estimate can become over/under-estimated and destabilise training.
 
 ### 5.3 On-screen hyperparameters
 Number of **hidden units**, **learning rate** (`lr`), **gamma (discount)** and
-**epsilon decay**. `Reset` applies the changes.
+**epsilon decay**. **Apply** (key `a`) rebuilds the Q network from the sliders and restarts
+training; it lights up while a slider differs from the running config. `Reset` puts every
+slider back to its default and applies that.
 
 ### 5.4 Pros and cons of DQN
 **Pros:** **more sample-efficient** than the GA when it works (reuses each transition via
@@ -180,7 +182,7 @@ In DQN, `steer` comes from the discrete action and `throttle` is fixed.
 - Reward constants: `STEER_ACTIONS`, `THROTTLE`, `R_PROGRESS`, `R_CRASH`, `STALL_STEPS`.
 
 ### 6.5 `app/dqnscreen.py` — this screen
-Panel: hidden units, `lr`, `gamma`, epsilon decay; buttons Play/Pause, Turbo, Reset, Track.
+Panel: hidden units, `lr`, `gamma`, epsilon decay; buttons Play/Pause, Turbo, Apply, Reset, Track.
 Each frame: `trainer.step(...)` (trains fast) and `trainer.demo_step()` (1 greedy-policy
 step, for the fixed-pace visualisation). It draws the demo car + rays, the `netview` (nodes
 = activation; **outputs = Q of each action**), the reward curve and the HUD (episode,

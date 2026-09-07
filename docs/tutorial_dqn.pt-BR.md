@@ -120,7 +120,9 @@ fixo; a estimativa de Q pode ficar super/subestimada e desestabilizar o treino.
 
 ### 5.3 Hiperparâmetros na tela
 Nº de **neurônios ocultos**, **taxa de aprendizado** (`lr`), **γ (desconto)** e
-**decaimento de ε**. `Reset` aplica as mudanças.
+**decaimento de ε**. **Aplicar** (tecla `a`) reconstrói a rede Q a partir dos sliders e
+reinicia o treino; acende enquanto algum slider difere da config em execução. `Reset` volta
+cada slider ao padrão e aplica isso.
 
 ### 5.4 Vantagens e desvantagens do DQN
 **Vantagens:** **amostra mais eficiente** que o GA quando funciona (reaproveita cada
@@ -176,8 +178,8 @@ No DQN, `steer` vem da ação discreta e `throttle` é fixo.
 - Constantes de recompensa: `STEER_ACTIONS`, `THROTTLE`, `R_PROGRESS`, `R_CRASH`, `STALL_STEPS`.
 
 ### 6.5 `app/dqnscreen.py` — esta tela
-Painel: neurônios ocultos, `lr`, `γ`, decaimento de ε; botões Play/Pause, Turbo, Reset,
-Pista. A cada frame: `trainer.step(...)` (treina rápido) e `trainer.demo_step()` (1 passo
+Painel: neurônios ocultos, `lr`, `γ`, decaimento de ε; botões Play/Pause, Turbo, Aplicar,
+Reset, Pista. A cada frame: `trainer.step(...)` (treina rápido) e `trainer.demo_step()` (1 passo
 da política gulosa, para a visualização a ritmo fixo). Desenha o carro-demonstração + raios,
 o `netview` (nós = ativação; **saídas = Q de cada ação**), a curva de recompensa e o HUD
 (episódio, ε, loss, buffer, recompensa/voltas, ação gulosa atual).

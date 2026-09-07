@@ -68,11 +68,11 @@ class GAScreen:
         self.b_play = Button(x, r1, bw, 24, t("btn.play"))
         self.b_gen = Button(x + g, r1, bw, 24, t("btn.nextgen"))
         self.b_turbo = Button(x + 2 * g, r1, bw, 24, t("btn.turbo"))
-        self.b_retrain = Button(x, r2, bw, 24, t("btn.retrain"))
+        self.b_apply = Button(x, r2, bw, 24, t("btn.apply"))
         self.b_reset = Button(x + g, r2, bw, 24, t("btn.reset"))
         self.b_track = Button(x + 2 * g, r2, bw, 24, t("btn.track"))
         self.pbuttons = [self.b_play, self.b_gen, self.b_turbo,
-                         self.b_retrain, self.b_reset, self.b_track]
+                         self.b_apply, self.b_reset, self.b_track]
 
     def _config(self) -> Config:
         s = self.sliders
@@ -95,6 +95,10 @@ class GAScreen:
         self.cam = Camera(self.trainer.track.outer, self.sim_rect)
         self.trace = self.trace_mlp = self.trace_fit = None
 
+    def _dirty(self) -> bool:
+        """True when the sliders no longer match the config the trainer is running."""
+        return self._config() != self.trainer.cfg
+
     def _apply(self):
         self.trainer.reset(self._config())
         self.trainer.start()
@@ -112,6 +116,8 @@ class GAScreen:
                 self.trainer.advance_generation()
             elif ev.key == pygame.K_t:
                 self.turbo = not self.turbo
+            elif ev.key == pygame.K_a:
+                self._apply()
             elif ev.key == pygame.K_h:
                 self.goto = "tutorial_ga"
 
@@ -125,7 +131,7 @@ class GAScreen:
             self.trainer.advance_generation()
         if self.b_turbo.poll():
             self.turbo = not self.turbo
-        if self.b_retrain.poll():
+        if self.b_apply.poll():
             self._apply()
         if self.b_reset.poll():
             self._build_panel()
@@ -175,8 +181,12 @@ class GAScreen:
             s.draw(surf, self.f)
         self.b_play.active = self.trainer.state == "running"
         self.b_turbo.active = self.turbo
+        self.b_apply.active = self._dirty()
         for b in self.pbuttons:
             b.draw(surf, self.f)
+        if self.b_apply.active:
+            surf.blit(self.f.render(t("ga.hint.apply"), True, theme.ACCENT),
+                      (self.panel_rect.x + 18, self.panel_rect.bottom - 20))
 
     def _draw_hud(self, surf):
         tr = self.trainer

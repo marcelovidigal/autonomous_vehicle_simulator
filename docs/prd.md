@@ -49,7 +49,7 @@ Não é para: pesquisa séria de RL, simulação veicular realista, competição
    maioria melhorar a cada geração.
 2. Como estudante, **passo o mouse/foco** no carro líder e vejo o **grafo de neurônios**
    reagindo às curvas (entradas dos sensores mudando, saída de direção mudando).
-3. Como professor, **aumento a taxa de mutação** e clico **Re-treinar**, e mostro que o
+3. Como professor, **aumento a taxa de mutação** e clico **Aplicar**, e mostro que o
    aprendizado fica mais errático.
 4. Como professor, **reduzo a camada oculta para 0** e mostro que ainda dá para dirigir
    uma pista simples (controle quase linear).
@@ -73,7 +73,7 @@ Não é para: pesquisa séria de RL, simulação veicular realista, competição
 | RF5 | Visualização em tempo real de pista, carro e raios dos sensores | Must |
 | RF6 | Grafo da rede sincronizado com o carro em foco: nós coloridos pela ativação **e arestas destacadas pelo sinal** (peso × ativação) | Must |
 | RF7 | Painel para editar todos os hiperparâmetros listados no §7 | Must |
-| RF8 | Botões: Iniciar/Pausar, Avançar 1 geração, Re-treinar, Reset, Acelerar | Must |
+| RF8 | Botões: Iniciar/Pausar, Avançar 1 geração, **Aplicar** (aplica os sliders + reinicia o treino; realça quando há mudança pendente; tecla `a`), Reset, Acelerar | Must |
 | RF9 | Salvar/Carregar genoma e config como JSON (download/upload) | Should |
 | RF10 | ≥2 pistas embutidas, troca em runtime | Must |
 | RF11 | HUD: geração, fitness (melhor/média), carros vivos, progresso/voltas | Must |
@@ -81,7 +81,7 @@ Não é para: pesquisa séria de RL, simulação veicular realista, competição
 | RF13 | *Presets* de hiperparâmetros ("estável", "agressivo", "mínimo") | Could |
 | RF14 | *Tooltips* explicando cada hiperparâmetro | Should |
 | RF16 | **Barra de menu superior** (abas RNA+AG / DQN / Sobre); app abre na Solução 1 | Must |
-| RF17 | **Solução 2 — DQN**: rede Q por gradiente (backprop manual) + *replay* + rede-alvo + ε-greedy; treina até 1 volta; **carro-demonstração a ritmo fixo** + grafo da rede Q + curva de recompensa/episódio; sliders: ocultos, lr, γ, ε | Must |
+| RF17 | **Solução 2 — DQN**: rede Q por gradiente (backprop manual) + *replay* + rede-alvo + ε-greedy; treina até 1 volta; **carro-demonstração a ritmo fixo** + grafo da rede Q + curva de recompensa/episódio; sliders: ocultos, lr, γ, ε; botão **Aplicar** (mesma semântica do RF8) | Must |
 | RF18 | **Tela Sobre** com a descrição do projeto | Must |
 | RF19 | **Tutorial por técnica**, aberto de dentro da simulação, com **Voltar**; conteúdo exclusivo (raycast no início; prós/contras; código passo a passo); **Baixar PDF** | Must |
 | RF20 | **Menu Configurações**: (a) idioma do app — **English (en-US)** (padrão) / **Português (pt-BR)**; (b) **velocidade da simulação** — 30 / 60 / 120 FPS / sem limite. Ambos aplicam na hora e persistem (localStorage no web / `~/.avs_settings.json` no desktop) | Must |
@@ -101,7 +101,7 @@ Tela única, três regiões (responsivo; em telas estreitas vira abas):
 │                               │  FITNESS × GERAÇÃO    │
 ├───────────────────────────────┴───────────────────────┤
 │  PAINEL: sliders de hiperparâmetros · pista ·          │
-│  [Iniciar/Pausar] [+1 ger] [Re-treinar] [Reset]        │
+│  [Iniciar/Pausar] [+1 ger] [Aplicar] [Reset] [Pista]   │
 │  [Acelerar] [Salvar] [Carregar]                        │
 └───────────────────────────────────────────────────────┘
 ```
@@ -146,8 +146,8 @@ Padrões conforme implementados em `core/config.py`. **P** = exposto como slider
 | Simulação | passos máx./genoma | 200–5000 | 1300 | |
 | Simulação | pista | circuito_1..3 | "circuito_1" | (botão) |
 
-Alterar um parâmetro **não** aplica sozinho: vale no próximo **Re-treinar** / **+1 geração**
-(exceto os puramente visuais). *Tooltips* explicam o efeito esperado.
+Alterar um slider **não** aplica sozinho: o botão **Aplicar** realça e, ao ser clicado
+(ou tecla `a`), reconstrói a config e reinicia o treino. *Tooltips* explicam o efeito.
 
 ## 8. Métricas de sucesso
 

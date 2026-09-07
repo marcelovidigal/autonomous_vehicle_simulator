@@ -68,9 +68,10 @@ class DQNScreen:
         r1, r2 = y + 8, y + 40
         self.b_play = Button(x, r1, bw, 24, t("btn.play"))
         self.b_turbo = Button(x + g, r1, bw, 24, t("btn.turbo"))
-        self.b_reset = Button(x + 2 * g, r1, bw, 24, t("btn.reset"))
-        self.b_track = Button(x, r2, bw, 24, t("btn.track"))
-        self.pbuttons = [self.b_play, self.b_turbo, self.b_reset, self.b_track]
+        self.b_apply = Button(x + 2 * g, r1, bw, 24, t("btn.apply"))
+        self.b_reset = Button(x, r2, bw, 24, t("btn.reset"))
+        self.b_track = Button(x + g, r2, bw, 24, t("btn.track"))
+        self.pbuttons = [self.b_play, self.b_turbo, self.b_apply, self.b_reset, self.b_track]
 
     def _cfg(self) -> Config:
         return Config(sim=SimCfg(max_steps=DDEF.max_steps, track=self.track))
@@ -82,6 +83,10 @@ class DQNScreen:
             gamma=float(s["gamma"].value), eps_decay_steps=int(s["edecay"].value),
             max_steps=DDEF.max_steps, seed=DDEF.seed,
         )
+
+    def _dirty(self) -> bool:
+        """True when the sliders no longer match the config the trainer is running."""
+        return self._cfg() != self.trainer.cfg or self._dcfg() != self.trainer.dqn
 
     def _apply(self):
         self.trainer.reset(self._cfg(), self._dcfg())
@@ -98,6 +103,8 @@ class DQNScreen:
                 self.trainer.toggle()
             elif ev.key == pygame.K_t:
                 self.turbo = not self.turbo
+            elif ev.key == pygame.K_a:
+                self._apply()
             elif ev.key == pygame.K_h:
                 self.goto = "tutorial_dqn"
 
@@ -109,6 +116,8 @@ class DQNScreen:
             self.trainer.toggle()
         if self.b_turbo.poll():
             self.turbo = not self.turbo
+        if self.b_apply.poll():
+            self._apply()
         if self.b_reset.poll():
             self._build_panel()
             self.turbo = False
@@ -147,10 +156,12 @@ class DQNScreen:
             s.draw(surf, self.f)
         self.b_play.active = self.trainer.state == "running"
         self.b_turbo.active = self.turbo
+        self.b_apply.active = self._dirty()
         for b in self.pbuttons:
             b.draw(surf, self.f)
-        surf.blit(self.f.render(t("dqn.hint.apply"), True, theme.TEXT_DIM),
-                  (self.panel_rect.x + 18, self.panel_rect.bottom - 22))
+        if self.b_apply.active:
+            surf.blit(self.f.render(t("dqn.hint.apply"), True, theme.ACCENT),
+                      (self.panel_rect.x + 18, self.panel_rect.bottom - 22))
 
     def _draw_hud(self, surf):
         tr = self.trainer
