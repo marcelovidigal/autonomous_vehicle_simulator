@@ -1,5 +1,6 @@
 # Autonomous Vehicle Simulator — Neural Networks (GA & DQN)
 
+
 A neural network learns — in front of you — to drive a car around a winding track using only
 distance sensors (raycasts). You watch the car on the track and the **neurons and
 connections lighting up** at the same time, and you can **change the hyperparameters and
