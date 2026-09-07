@@ -10,6 +10,8 @@ the auto-generated commit/PR list.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-07
+
 ### Fixed
 - The `build` extra now pulls in `pygame-ce` — it is needed at PyInstaller freeze
   time, so `pip install -e ".[build]"` alone previously produced an executable that
@@ -68,5 +70,6 @@ First public release.
   smoke), `release.yml` (Windows/macOS/Linux executables on tag `v*`),
   `deploy-pages.yml` (GitHub Pages).
 
-[Unreleased]: https://github.com/OWNER/autonomous_vehicle_simulator/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/OWNER/autonomous_vehicle_simulator/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/OWNER/autonomous_vehicle_simulator/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/OWNER/autonomous_vehicle_simulator/releases/tag/v0.1.0
