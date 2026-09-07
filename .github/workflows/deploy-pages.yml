@@ -18,16 +18,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      # Turns Pages on with "GitHub Actions" as the source, so the first run does
-      # not need the repo Settings to be touched by hand.
+      # NOTE: enable Pages once by hand first:
+      #   repo Settings -> Pages -> Build and deployment -> Source = "GitHub Actions".
+      # The default GITHUB_TOKEN cannot create the Pages site itself.
       - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - name: Cache pygbag runtime
         uses: actions/cache@v4
         with:

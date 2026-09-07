@@ -51,6 +51,12 @@ def main() -> None:
     console = "--console" in sys.argv
     import PyInstaller.__main__
 
+    for mod in ("pygame", "numpy"):          # must be importable to be frozen in
+        try:
+            __import__(mod)
+        except ImportError:
+            sys.exit(f"error: '{mod}' is not installed - run  pip install -e \".[build]\"")
+
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
         assets = [(p, "app") for p in _md_files() + _build_pdfs(tmp)]

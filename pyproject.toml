@@ -10,8 +10,8 @@ dependencies = ["numpy>=1.26"]
 [project.optional-dependencies]
 app = ["pygame-ce>=2.5"]
 web = ["pygbag>=0.9"]
-docs = ["reportlab>=4"]                   # tutorial -> PDF
-build = ["pyinstaller>=6"]               # native executable
+docs = ["reportlab>=4"]                              # tutorial -> PDF
+build = ["pyinstaller>=6", "pygame-ce>=2.5"]         # native executable (needs pygame at freeze time)
 dev = ["pytest>=8", "ruff>=0.6", "pygame-ce>=2.5", "reportlab>=4", "pyinstaller>=6"]
 
 [build-system]

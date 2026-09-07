@@ -10,6 +10,17 @@ the auto-generated commit/PR list.
 
 ## [Unreleased]
 
+### Fixed
+- The `build` extra now pulls in `pygame-ce` — it is needed at PyInstaller freeze
+  time, so `pip install -e ".[build]"` alone previously produced an executable that
+  crashed on `import pygame` (this also affected the release binaries).
+  `scripts/build_exe.py` now fails fast if `pygame`/`numpy` are missing.
+- CI test jobs use `actions/setup-python` + plain `pip` instead of
+  `uv pip install --system` (no reliable target Python on the runner).
+- Workflows bumped to `actions/checkout@v5` / `actions/setup-python@v6` (Node 24).
+- `deploy-pages.yml`: dropped `configure-pages` `enablement: true` — the default
+  `GITHUB_TOKEN` cannot create the Pages site; enable it once in repo Settings.
+
 ### Added
 - Settings: **Simulation speed** (frame-rate cap: 30 / 60 / 120 / Uncapped), persisted
   like the language choice. Useful for lectures and screen capture.
