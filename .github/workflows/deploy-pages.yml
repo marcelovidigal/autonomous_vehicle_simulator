@@ -22,6 +22,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      # Turns Pages on with "GitHub Actions" as the source, so the first run does
+      # not need the repo Settings to be touched by hand.
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - name: Cache pygbag runtime
         uses: actions/cache@v4
         with:
@@ -29,7 +35,9 @@ jobs:
           key: pygbag-${{ runner.os }}-${{ hashFiles('scripts/build_web.sh') }}
           restore-keys: pygbag-${{ runner.os }}-
       - name: Install build tools
-        run: pip install pygbag reportlab
+        run: |
+          python -m pip install --upgrade pip
+          pip install pygbag reportlab
       - name: Build WASM bundle
         run: bash scripts/build_web.sh
       - name: Disable Jekyll

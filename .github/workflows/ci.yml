@@ -11,11 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install
-        run: uv pip install --system -e ".[dev]"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
       - name: Ruff
         run: ruff check .
       - name: Tests (fast + slow)
@@ -28,11 +30,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install
-        run: uv pip install --system -e ".[dev]"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
       - name: Headless screen smoke
         env:
           SDL_VIDEODRIVER: dummy
@@ -50,7 +54,9 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install
-        run: pip install -e ".[build,docs]"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[build,docs]"
       - name: Build executable
         run: python scripts/build_exe.py
       - name: Package
